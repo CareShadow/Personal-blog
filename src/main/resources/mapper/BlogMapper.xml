@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blog.dao.BlogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.blog.entity.Blog">
+        <id column="blog_title" property="blogTitle" />
+        <result column="blog_preface" property="blogPreface" />
+        <result column="blog_content" property="blogContent" />
+        <result column="blog_category_id" property="blogCategoryId" />
+        <result column="blog_status" property="blogStatus" />
+        <result column="blog_views" property="blogViews" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        blog_title, blog_preface, blog_content, blog_category_id, blog_status, blog_views, create_time, update_time
+    </sql>
+    <!-- 分页返回数据-->
+    <select id="getBlog" resultType="com.blog.entity.Blog" >
+        select <include refid="Base_Column_List"></include> from blog limit #{page},#{count};
+    </select>
+    <!--获取总数目-->
+    <select id="getTotal" resultType="java.lang.Integer">
+        select count(*) from blog;
+    </select>
+</mapper>
