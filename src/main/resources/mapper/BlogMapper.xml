@@ -20,10 +20,11 @@
     </sql>
     <!-- 分页返回数据-->
     <select id="getBlog" resultType="com.blog.entity.Blog" >
-        select <include refid="Base_Column_List"></include> from blog limit #{page},#{count};
+        select <include refid="Base_Column_List"></include> from blog where blog_status = 0 and blog_title like concat('%',#{search},'%')  limit #{page},#{count};
     </select>
     <!--获取总数目-->
     <select id="getTotal" resultType="java.lang.Integer">
-        select count(*) from blog;
+        select count(*) from blog where blog_status = 0 and blog_title like concat('%',#{search},'%');
     </select>
+
 </mapper>

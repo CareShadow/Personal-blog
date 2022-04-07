@@ -1,5 +1,6 @@
 package com.blog.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -21,45 +22,33 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Blog implements Serializable {
+public class Category implements Serializable {
 
 private static final long serialVersionUID=1L;
 
     /**
-     * 文章标题
+     * 分类ID
      */
-    @TableId("blog_title")
-    private String blogTitle;
+    @TableId(value = "category_id", type = IdType.AUTO)
+    private Integer categoryId;
 
     /**
-     * 文章预览
+     * 分类名字
      */
-    @TableField("blog_preface")
-    private String blogPreface;
+    @TableField("category_name")
+    private String categoryName;
 
     /**
-     * 文章内容
+     * 分类排名
      */
-    @TableField("blog_content")
-    private String blogContent;
+    @TableField("category_rank")
+    private Integer categoryRank;
 
     /**
-     * 文章分类
+     * 分类状态
      */
-    @TableField("blog_category_id")
-    private Integer blogCategoryId;
-
-    /**
-     * 文章状态
-     */
-    @TableField("blog_status")
-    private Integer blogStatus;
-
-    /**
-     * 文章查看次数
-     */
-    @TableField("blog_views")
-    private Integer blogViews;
+    @TableField("category_status")
+    private Integer categoryStatus;
 
     /**
      * 创建时间
@@ -67,13 +56,6 @@ private static final long serialVersionUID=1L;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")    //将Date转换成String,一般后台传值给前台时
     @TableField("create_time")
     private Date createTime;
-
-    /**
-     * 更新时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")    //将Date转换成String,一般后台传值给前台时
-    @TableField("update_time")
-    private Date updateTime;
 
 
 }

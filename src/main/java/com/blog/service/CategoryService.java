@@ -1,6 +1,6 @@
 package com.blog.service;
 
-import com.blog.entity.Blog;
+import com.blog.entity.Category;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author lxl
  * @since 2022-04-07
  */
-public interface BlogService extends IService<Blog> {
+public interface CategoryService extends IService<Category> {
 
 }

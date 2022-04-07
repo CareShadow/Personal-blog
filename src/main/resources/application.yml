@@ -62,4 +62,4 @@ server:
 
 # 打印sql语句
 logging:
-  level.com.example: debug
+  level.com.blog: debug

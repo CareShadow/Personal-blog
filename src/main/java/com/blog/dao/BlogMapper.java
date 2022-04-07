@@ -12,9 +12,10 @@ import java.util.List;
  * </p>
  *
  * @author lxl
- * @since 2022-04-06
+ * @since 2022-04-07
  */
 public interface BlogMapper extends BaseMapper<Blog> {
     List<Blog> getBlog(Pagination pagination);
-    Integer getTotal();
+    Integer getTotal(String search);
+
 }
