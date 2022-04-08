@@ -7,6 +7,8 @@ import com.blog.model.ReqBlog;
 import com.blog.pojo.Pagination;
 import com.blog.pojo.ResultVO;
 import com.blog.service.BlogService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +27,7 @@ import java.util.Map;
  **/
 @RestController
 @CrossOrigin
+@Api(tags = "博客列表--Controller")
 @RequestMapping("/blog")
 public class BlogController {
     @Autowired(required = false)
@@ -38,9 +41,10 @@ public class BlogController {
      * @auther: lxl
      * @date: 2022/4/6 20:49
      */
-    @GetMapping("/list/{page}/{count}/{search}")
+    @PostMapping("/list")
+    @ApiOperation("获取博客列表--search")
     @Transactional
-    public ResultVO<Map<String,Object>> getAllBlog(@PathVariable("page") int page, @PathVariable("count") int count,@PathVariable("search") String search){
+    public ResultVO<Map<String,Object>> getAllBlog(int page,int count,String search){
         // 算出起始位置(page-1)*count;
         Pagination pagination = new Pagination((page-1)*count,count,search);
         List<Blog> blogList = blogMapper.getBlog(pagination);
@@ -62,6 +66,7 @@ public class BlogController {
      * @date: 2022/4/7 9:27
      */
     @GetMapping("/alter/{blog_title}/{blog_status}")
+    @ApiOperation("修改博客状态--update")
     @Transactional
     public ResultVO<String> alterBlogStatus(@PathVariable("blog_title") String blog_title,@PathVariable("blog_status") int blog_status){
         // blog_status判断
@@ -80,6 +85,7 @@ public class BlogController {
      * @date: 2022/4/7 10:32
      */
     @PostMapping("/addBlog")
+    @ApiOperation("增加博客--add")
     public ResultVO<String> addBlog(@RequestBody ReqBlog reqBlog){
         // 判断文章标题是否存在
         Blog blog = blogService.getOne(new QueryWrapper<Blog>().lambda().eq(Blog::getBlogTitle, reqBlog.getBlogTitle()));
@@ -104,6 +110,7 @@ public class BlogController {
      * @date: 2022/4/7 10:37
      */
     @GetMapping("delete/{blog_title}")
+    @ApiOperation("删除博客--delete")
     public ResultVO<String> deleteBlog(@PathVariable("blog_title") String blog_title) {
         boolean removeById = blogService.removeById(blog_title);
         String msg = removeById ? "删除成功" : "删除失败";
@@ -116,9 +123,22 @@ public class BlogController {
      * @auther: lxl
      * @date: 2022/4/7 17:29
      */
+    @ApiOperation("查看博客详情--view")
     @GetMapping("/view/{blog_title}")
     public ResultVO<Blog> viewBlog(@PathVariable("blog_title") String blog_title){
         Blog blog = blogService.getOne(new QueryWrapper<Blog>().lambda().eq(Blog::getBlogTitle, blog_title));
         return new ResultVO<>(blog);
+    }
+    /**
+     * 功能描述：用于测试拦截器是否正常
+     * @param: []
+     * @return: com.blog.pojo.ResultVO<java.lang.String>
+     * @auther: lxl
+     * @date: 2022/4/8 18:45
+     */
+    @GetMapping("/text")
+    @ApiOperation("测试接口--text")
+    public ResultVO<String> api(){
+        return new ResultVO<>("测试");
     }
 }

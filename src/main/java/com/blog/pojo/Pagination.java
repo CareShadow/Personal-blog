@@ -11,10 +11,10 @@ import lombok.Data;
  **/
 @Data
 public class Pagination {
-    private int page;
-    private int count;
+    private Integer page;
+    private Integer count;
     private String search;
-    public Pagination(int page,int count,String search){
+    public Pagination(Integer page,Integer count,String search){
         this.page = page;
         this.count = count;
         this.search = search;

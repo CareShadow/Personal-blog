@@ -15,14 +15,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  **/
 @Configuration
 public class MyWebMvcConfigurer implements WebMvcConfigurer {
-//    @Autowired
-//    private LoginInterceptor loginInterceptor;
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(loginInterceptor)
-//                .addPathPatterns("/admin/**")
-//                .addPathPatterns("/blog/**")
-//                .excludePathPatterns("/admin/login")
-//                .excludePathPatterns("/admin/register");
-//    }
+    @Autowired
+    private LoginInterceptor loginInterceptor;
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(loginInterceptor)
+                .addPathPatterns("/admin/**")
+                .addPathPatterns("/blog/**")
+                .excludePathPatterns("/admin/login")
+                .excludePathPatterns("/swagger-ui/index.html")
+                .excludePathPatterns("/admin/register");
+    }
 }
