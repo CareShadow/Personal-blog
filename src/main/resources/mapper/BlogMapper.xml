@@ -13,25 +13,44 @@
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
     </resultMap>
-
+    <resultMap id="detailBlog" type="com.blog.model.RespBlog">
+        <id column="blog_title" property="blogTitle"></id>
+        <result column="blog_preface" property="blogPreface" />
+        <result column="blog_content" property="blogContent" />
+        <result column="blog_status" property="blogStatus" />
+        <result column="blog_views" property="blogViews" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <association property="category" javaType="com.blog.entity.Category">
+            <id column="category_id" property="categoryId" />
+            <result column="category_name" property="categoryName" />
+            <result column="category_rank" property="categoryRank" />
+            <result column="category_status" property="categoryStatus" />
+            <result column="create_time" property="createTime" />
+        </association>
+    </resultMap>
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        blog_title, blog_preface, blog_content, blog_category_id, blog_status, blog_views, create_time, update_time
+        blog_title, blog_preface, blog_content, blog_category_id, blog_status, blog_views, blog.create_time, update_time
     </sql>
     <!-- 分页返回数据-->
-    <select id="getBlog" resultType="com.blog.entity.Blog" >
-        select <include refid="Base_Column_List"></include> from blog where blog_status = 0
+    <select id="getBlog" resultMap="detailBlog" >
+        select * from blog inner join category on blog.blog_category_id = category.category_id
+        <where>
           <if test="search !=null and search !=''">
-           and blog_title like concat('%',#{search},'%')
+            blog_title like concat('%',#{search},'%')
           </if>
+        </where>
           limit #{page},#{count};
     </select>
     <!--获取总数目-->
     <select id="getTotal" parameterType="java.lang.String" resultType="java.lang.Integer">
-        select count(*) from blog where blog_status = 0
-        <if test="search !=null and search !=''">
-        and blog_title like concat('%',#{search},'%')
-        </if>
+        select count(*) from blog
+        <where>
+            <if test="search !=null and search !=''">
+            and blog_title like concat('%',#{search},'%')
+            </if>
+        </where>
     </select>
 
 </mapper>

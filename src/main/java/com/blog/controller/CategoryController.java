@@ -3,11 +3,12 @@ package com.blog.controller;
 import com.blog.entity.Category;
 import com.blog.pojo.ResultVO;
 import com.blog.service.CategoryService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,6 +19,7 @@ import java.util.List;
  * @Version 1.0
  **/
 @RestController
+@Api(tags = "文章分类接口类--Controller")
 @RequestMapping("/category")
 public class CategoryController {
     @Autowired
@@ -29,9 +31,32 @@ public class CategoryController {
      * @auther: lxl
      * @date: 2022/4/7 18:15
      */
+    @ApiOperation("文章分类接口--select")
     @GetMapping("/list")
     public ResultVO<List<Category>> getCategoryList(){
         List<Category> categories = categoryService.list();
         return new ResultVO<>(categories);
+    }
+    @ApiOperation("增加文章分类接口--insert")
+    @PostMapping("/insert")
+    public ResultVO<String> insertCategory(String categoryName){
+        Category category = new Category();
+        category.setCategoryName(categoryName);
+        category.setCategoryRank(0);
+        category.setCategoryStatus(0);
+        category.setCreateTime(new Date());
+        boolean save = categoryService.save(category);
+        String msg =  save?"增加成功":"增加失败";
+        return new ResultVO<>(msg);
+    }
+    @ApiOperation("修改文章分类状态")
+    @GetMapping("alter/{category_id}/{category_status}")
+    public ResultVO<String> alterCategory(@PathVariable("category_id") Integer category_id,
+                                          @PathVariable("category_status") Integer category_status){
+        Category category = new Category();
+        category.setCategoryId(category_id).setCategoryStatus(category_status);
+        boolean updateById = categoryService.updateById(category);
+        String msg = updateById?"修改成功":"修改失败";
+        return new ResultVO<>(msg);
     }
 }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.blog.dao.BlogMapper;
 import com.blog.entity.Blog;
 import com.blog.model.ReqBlog;
+import com.blog.model.RespBlog;
 import com.blog.pojo.Pagination;
 import com.blog.pojo.ResultVO;
 import com.blog.service.BlogService;
@@ -27,7 +28,7 @@ import java.util.Map;
  **/
 @RestController
 @CrossOrigin
-@Api(tags = "博客列表--Controller")
+@Api(tags = "博客接口类--Controller")
 @RequestMapping("/blog")
 public class BlogController {
     @Autowired(required = false)
@@ -47,7 +48,7 @@ public class BlogController {
     public ResultVO<Map<String,Object>> getAllBlog(int page,int count,String search){
         // 算出起始位置(page-1)*count;
         Pagination pagination = new Pagination((page-1)*count,count,search);
-        List<Blog> blogList = blogMapper.getBlog(pagination);
+        List<RespBlog> blogList = blogMapper.getBlog(pagination);
         Integer Count = blogMapper.getTotal(search);
         Integer Pages = Count%page==0?Count/page:Count/page+1;
         Map<String,Object> map = new HashMap<>();
@@ -89,7 +90,6 @@ public class BlogController {
     public ResultVO<String> addBlog(@RequestBody ReqBlog reqBlog){
         // 判断文章标题是否存在
         Blog blog = blogService.getOne(new QueryWrapper<Blog>().lambda().eq(Blog::getBlogTitle, reqBlog.getBlogTitle()));
-        if(blog==null) return new ResultVO<>("文章标题已存在");
         Blog saveBlog = new Blog().setBlogTitle(reqBlog.getBlogTitle())
                 .setBlogStatus(reqBlog.getBlogStatus())
                 .setBlogCategoryId(reqBlog.getBlogCategoryId())
@@ -98,8 +98,14 @@ public class BlogController {
                 .setBlogViews(0)
                 .setCreateTime(new Date())
                 .setUpdateTime(new Date());
-        boolean save = blogService.save(saveBlog);
-        String msg = save?"添加成功":"添加失败";
+        boolean save =false,updateById=false;
+        if(blog==null) {
+             save = blogService.save(saveBlog);
+        }else{
+             updateById = blogService.updateById(saveBlog);
+        }
+
+        String msg = save&&updateById?"添加成功":"添加失败";
         return new ResultVO<>(msg);
     }
     /** 删除博客

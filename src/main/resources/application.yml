@@ -59,6 +59,12 @@ mybatis-plus:
   type-aliases-package: com.blog.entity
   mapper-locations: classpath*:mapper/*.xml
 
+# 图片存放路径
+upload:
+  uploadAuthorImg: "D:/tmp/myblog/authorImg/"
+  fileUploadDic: "D:/tmp/myblog/upload/"
+  sqlAuthorImg: "/authorImg/"
+  fileSqlDic: "/upload/"
 # 端口8081
 server:
   port: 8081

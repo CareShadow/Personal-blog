@@ -18,7 +18,7 @@ import java.util.Map;
  * @Date 2022/4/6 15:28
  * @Version 1.0
  **/
-@Api(tags = "用户登录--Controller")
+@Api(tags = "用户登录接口类--Controller")
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
