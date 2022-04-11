@@ -50,13 +50,20 @@ public class CategoryController {
         return new ResultVO<>(msg);
     }
     @ApiOperation("修改文章分类状态")
-    @GetMapping("alter/{category_id}/{category_status}")
+    @GetMapping("/alter/{category_id}/{category_status}")
     public ResultVO<String> alterCategory(@PathVariable("category_id") Integer category_id,
                                           @PathVariable("category_status") Integer category_status){
         Category category = new Category();
         category.setCategoryId(category_id).setCategoryStatus(category_status);
         boolean updateById = categoryService.updateById(category);
         String msg = updateById?"修改成功":"修改失败";
+        return new ResultVO<>(msg);
+    }
+    @ApiOperation("删除文章状态")
+    @GetMapping("/delete/{category_id}")
+    public ResultVO<String> deleteCategory(@PathVariable("category_id") Integer category_id){
+        boolean removeById = categoryService.removeById(category_id);
+        String msg = removeById?"删除成功":"删除失败";
         return new ResultVO<>(msg);
     }
 }
