@@ -1,13 +1,16 @@
 package com.blog.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.blog.dao.BlogMapper;
 import com.blog.entity.Blog;
+import com.blog.entity.Category;
 import com.blog.model.ReqBlog;
 import com.blog.model.RespBlog;
 import com.blog.pojo.Pagination;
 import com.blog.pojo.ResultVO;
 import com.blog.service.BlogService;
+import com.blog.service.CategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +38,8 @@ public class BlogController {
     private BlogMapper blogMapper;
     @Autowired
     private BlogService blogService;
+    @Autowired
+    private CategoryService categoryService;
     /**
      * 功能描述：获取博客列表的信息 + 搜索值
      * @param: [page, count]
@@ -87,6 +92,7 @@ public class BlogController {
      */
     @PostMapping("/addBlog")
     @ApiOperation("增加博客--add")
+    @Transactional
     public ResultVO<String> addBlog(@RequestBody ReqBlog reqBlog){
         // 判断文章标题是否存在
         Blog blog = blogService.getOne(new QueryWrapper<Blog>().lambda().eq(Blog::getBlogTitle, reqBlog.getBlogTitle()));
@@ -95,14 +101,19 @@ public class BlogController {
                 .setBlogCategoryId(reqBlog.getBlogCategoryId())
                 .setBlogContent(reqBlog.getBlogContent())
                 .setBlogPreface(reqBlog.getBlogPreface())
-                .setBlogViews(0)
                 .setCreateTime(new Date())
                 .setUpdateTime(new Date());
         boolean save =false,updateById=false;
+
         if(blog==null) {
+             //该文章分类category_rank
+             Category category = categoryService.getOne(new QueryWrapper<Category>().lambda().eq(Category::getCategoryId, reqBlog.getBlogCategoryId()));
+             categoryService.update(category,new UpdateWrapper<Category>().lambda().eq(Category::getCategoryId, reqBlog.getBlogCategoryId()).set(Category::getCategoryRank,category.getCategoryRank()+1));
+             saveBlog.setBlogViews(0);
              save = blogService.save(saveBlog);
         }else{
-             updateById = blogService.updateById(saveBlog);
+            saveBlog.setBlogViews(blog.getBlogViews());
+            updateById = blogService.updateById(saveBlog);
         }
 
         String msg = save&&updateById?"添加成功":"添加失败";

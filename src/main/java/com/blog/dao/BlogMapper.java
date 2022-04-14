@@ -19,5 +19,6 @@ import java.util.List;
 public interface BlogMapper extends BaseMapper<Blog> {
     List<RespBlog> getBlog(Pagination pagination);
     Integer getTotal(@Param("search") String search);
-
+    List<Blog> getNewBlog();
+    List<Blog> getHotBlog();
 }

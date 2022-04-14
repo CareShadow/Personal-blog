@@ -24,6 +24,7 @@ public class MyWebMvcConfigurer implements WebMvcConfigurer {
         registry.addInterceptor(loginInterceptor)
                 .addPathPatterns("/admin/**")
                 .addPathPatterns("/blog/**")
+                .excludePathPatterns("/index/**")
                 .excludePathPatterns("/admin/user/login") // 登录接口
                 .excludePathPatterns("/admin/user/logout") // 登出接口
                 .excludePathPatterns("/swagger-ui/index.html"); // Swagger接口文档

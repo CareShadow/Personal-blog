@@ -52,5 +52,12 @@
             </if>
         </where>
     </select>
-
+    <!--获取最新发布的文章-->
+    <select id="getNewBlog" resultType="com.blog.entity.Blog">
+        select * from blog order by create_time desc limit 0,4
+    </select>
+    <!--获取点击最多的文章-->
+    <select id="getHotBlog" resultType="com.blog.entity.Blog">
+        select * from blog order by blog_views desc limit 0,4
+    </select>
 </mapper>

@@ -1,5 +1,6 @@
 package com.blog.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.blog.entity.Category;
 import com.blog.pojo.ResultVO;
 import com.blog.service.CategoryService;
@@ -31,11 +32,17 @@ public class CategoryController {
      * @auther: lxl
      * @date: 2022/4/7 18:15
      */
-    @ApiOperation("文章分类接口--select")
+    @ApiOperation("文章分类已发布接口--select")
     @GetMapping("/list")
     public ResultVO<List<Category>> getCategoryList(){
         List<Category> categories = categoryService.list();
         return new ResultVO<>(categories);
+    }
+    @ApiOperation("文章分类--select")
+    @GetMapping("/list/status")
+    public ResultVO<List<Category>> getCategoryStatusList(){
+        List<Category> categoryList = categoryService.list(new QueryWrapper<Category>().lambda().eq(Category::getCategoryStatus,0));
+        return new ResultVO<>(categoryList);
     }
     @ApiOperation("增加文章分类接口--insert")
     @PostMapping("/insert")
